@@ -1,6 +1,7 @@
 package com.example.newsflowproject.domain
 
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,25 +16,10 @@ class NewsViewModel @Inject constructor(
     private val newsRepository: NewsRepository
 ) : ViewModel() {
 
-    val mutableLiveData = MutableLiveData<Resource<List<NewsDomainModel>>>()
-//    lateinit var newsDomainModel: NewsDomainModel
-//    val mutableLiveDate = MutableStateFlow<NewsDomainModel>(newsDomainModel)
-//    val liveData  : StateFlow<NewsDomainModel> = mutableLiveDate
-//    val result: Flow<NewsDomainModel> = flow {
-//        val data = newsRepository.requestNews()
-//        emit(data)
-//    }.stateIn(
-//        scope = viewModelScope,
-//        started = SharingStarted.WhileSubscribed(5000L),
-//        initialValue = State.Content
-//    )
+    private val mutableLiveData = MutableLiveData<Resource<NewsDomainModel>>()
 
-    init {
-        startNews()
-    }
-    private fun startNews() {
+     fun startNews() {
         viewModelScope.launch {
-//            mutableLiveData.postValue(Resource.loading(null))
             newsRepository.requestNews()
                 .flowOn(Dispatchers.IO)
                 .onStart {
@@ -41,6 +27,7 @@ class NewsViewModel @Inject constructor(
                 }
                 .catch { e ->
                     mutableLiveData.postValue(Resource.error(e.toString(), null))
+                    Log.e("MainActivity", "startNews: $e " )
                 }
                 .collect{
                     mutableLiveData.postValue(Resource.success(it))
@@ -53,11 +40,4 @@ class NewsViewModel @Inject constructor(
             newsRepository.requestNews()
         }
     }
-
-
-//    fun handleMusicEventsAction(musicEvent: OpenUrlScreenAction) {
-//        if (musicEvent.url.isEmpty()) return
-//        appNavigator.openMusicItemScreen(musicEvent.url)
-//    }
-
 }

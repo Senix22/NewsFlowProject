@@ -1,18 +1,20 @@
 package com.example.newsflowproject.data
 
+
 import com.example.newsflowproject.data.api.NewsResponse
 import com.example.newsflowproject.domain.NewsDomainModel
+import javax.inject.Inject
 
-object NewsMapper {
-    fun mapResponse(newsResponse: NewsResponse) : List<NewsDomainModel>{
-        return newsResponse.articles.map { newsDto ->
+class NewsResponseMapper @Inject constructor() {
+    fun mapResponse(newsResponse: NewsResponse): List<NewsDomainModel> {
+        return newsResponse.articles?.map { newsItem ->
             NewsDomainModel(
-                author = newsDto.author.orEmpty(),
-                title = newsDto.title.orEmpty(),
-                description = newsDto.description.orEmpty(),
-                url = newsDto.url.orEmpty(),
-                urlToImage = newsDto.urlToImage.orEmpty(),
-                publishedAt = newsDto.publishedAt.orEmpty()
+                author = newsItem.author.orEmpty(),
+                title = newsItem.title.orEmpty(),
+                description = newsItem.description.orEmpty(),
+                url = newsItem.url.orEmpty(),
+                urlToImage = newsItem.urlToImage.orEmpty(),
+                publishedAt = newsItem.publishedAt.orEmpty()
             )
         } ?: emptyList()
     }

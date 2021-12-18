@@ -4,12 +4,13 @@ import com.example.newsflowproject.data.api.NewsApi
 import com.example.newsflowproject.domain.NewsDomainModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 
-class NewsRepository constructor(private val api: NewsApi) {
-    fun requestNews(): Flow<List<NewsDomainModel>> =
+class NewsRepository constructor(private val api: NewsApi, private val news: NewsResponseMapper) {
+    fun requestNews(): Flow<NewsDomainModel> =
         flow {
             api.getNews()
-                .map(NewsMapper::mapResponse)
+                .map { news.mapResponse(it) }
         }
 }
