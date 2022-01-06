@@ -37,11 +37,27 @@ fun NewsListItem(news: NewsDomainModel) {
                     .fillMaxWidth()
                     .align(Alignment.CenterVertically)
             ) {
-                Text(text = news.author.orEmpty(), style = MaterialTheme.typography.h6, color =Color.White )
+                Text(
+                    text = news.author.orEmpty(),
+                    style = MaterialTheme.typography.h6,
+                    color = Color.White
+                )
 
-                Text(text = news.description.orEmpty(), style = MaterialTheme.typography.h6, color =Color.White )
-                Text(text = news.title.orEmpty(), style = MaterialTheme.typography.h6, color =Color.White )
-                Text(text = news.publishedAt.orEmpty(), style = MaterialTheme.typography.h6, color =Color.White )
+                Text(
+                    text = news.description.orEmpty(),
+                    style = MaterialTheme.typography.h6,
+                    color = Color.White
+                )
+                Text(
+                    text = news.title.orEmpty(),
+                    style = MaterialTheme.typography.h6,
+                    color = Color.White
+                )
+                Text(
+                    text = news.publishedAt.orEmpty(),
+                    style = MaterialTheme.typography.h6,
+                    color = Color.White
+                )
             }
         }
     }

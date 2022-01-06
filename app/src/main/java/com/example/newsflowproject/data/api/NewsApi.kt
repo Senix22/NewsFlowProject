@@ -7,5 +7,5 @@ import retrofit2.http.Query
 interface NewsApi {
 
     @GET("/v2/top-headlines?sources=bbc-news&apiKey=435149dee83241479ddd0c3c8672cef9")
-     suspend fun getNews() : Flow<NewsResponse>
+     suspend fun getNews() : NewsResponse
 }

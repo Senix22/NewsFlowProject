@@ -7,10 +7,12 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 
-class NewsRepository constructor(private val api: NewsApi, private val news: NewsResponseMapper) {
-    fun requestNews(): Flow<NewsDomainModel> =
+class NewsRepository constructor(
+    private val api: NewsApi,
+    private val newsMapper: NewsResponseMapper
+) {
+    suspend fun requestNews(): Flow<List<NewsDomainModel>> =
         flow {
-            api.getNews()
-                .map { news.mapResponse(it) }
+            emit(newsMapper.mapResponse(api.getNews()))
         }
 }

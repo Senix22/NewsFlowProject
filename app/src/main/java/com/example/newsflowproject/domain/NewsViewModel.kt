@@ -16,28 +16,27 @@ class NewsViewModel @Inject constructor(
     private val newsRepository: NewsRepository
 ) : ViewModel() {
 
-    private val mutableLiveData = MutableLiveData<Resource<NewsDomainModel>>()
+    private val mutableLiveData = MutableLiveData<Resource<List<NewsDomainModel>>>()
 
-     fun startNews() {
+    fun startNews() {
         viewModelScope.launch {
             newsRepository.requestNews()
-                .flowOn(Dispatchers.IO)
                 .onStart {
                     mutableLiveData.postValue(Resource.loading(null))
                 }
+                .map {
+                    Resource.success(it)
+                }
                 .catch { e ->
                     mutableLiveData.postValue(Resource.error(e.toString(), null))
-                    Log.e("MainActivity", "startNews: $e " )
+                    Log.e("MainActivity", "startNews: $e ")
                 }
-                .collect{
-                    mutableLiveData.postValue(Resource.success(it))
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    mutableLiveData.postValue(it)
                 }
+
         }
     }
 
-    private fun loadData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            newsRepository.requestNews()
-        }
-    }
 }

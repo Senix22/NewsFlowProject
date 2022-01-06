@@ -10,7 +10,7 @@ data class NewsDto(
     @SerializedName("author") val author: String?,
     @SerializedName("title") val title: String?,
     @SerializedName("description") val description: String?,
-    @SerializedName("URL", alternate = ["url"]) val url: String?,
+    @SerializedName("url") val url: String?,
     @SerializedName("urlToImage") val urlToImage: String?,
     @SerializedName("publishedAt") val publishedAt: String?
 ) : NewsEventResponse()
