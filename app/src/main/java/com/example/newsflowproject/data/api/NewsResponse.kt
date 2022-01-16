@@ -6,7 +6,7 @@ import java.io.Serializable
 data class NewsResponse(@SerializedName("articles") val articles: List<NewsDto>?)
 
 data class NewsDto(
-    @SerializedName("source") val sources: String?,
+    @SerializedName("sources") val sources: String?,
     @SerializedName("author") val author: String?,
     @SerializedName("title") val title: String?,
     @SerializedName("description") val description: String?,

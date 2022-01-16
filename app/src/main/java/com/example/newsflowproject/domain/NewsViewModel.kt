@@ -2,11 +2,10 @@ package com.example.newsflowproject.domain
 
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsflowproject.data.NewsRepository
-import com.example.newsflowproject.domain.utils.Resource
+import com.example.newsflowproject.domain.utils.NewsStates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -16,24 +15,32 @@ class NewsViewModel @Inject constructor(
     private val newsRepository: NewsRepository
 ) : ViewModel() {
 
-    private val mutableLiveData = MutableLiveData<Resource<List<NewsDomainModel>>>()
+
+    private val mutableStateFlow: MutableStateFlow<List<NewsDomainModel>> =
+        MutableStateFlow(ArrayList())
+    var stateFlow: StateFlow<List<NewsDomainModel>> = mutableStateFlow.asStateFlow()
+
+    init {
+        startNews()
+    }
 
     fun startNews() {
         viewModelScope.launch {
             newsRepository.requestNews()
                 .onStart {
-                    mutableLiveData.postValue(Resource.loading(null))
+//                    mutableStateFlow.value = NewsStates.error("",null)
                 }
                 .map {
-                    Resource.success(it)
+//                    NewsStates.success(it)
+                    it
                 }
                 .catch { e ->
-                    mutableLiveData.postValue(Resource.error(e.toString(), null))
+//                    mutableLiveData.postValue(Resource.error(e.toString(), null))
                     Log.e("MainActivity", "startNews: $e ")
                 }
                 .flowOn(Dispatchers.IO)
                 .collect {
-                    mutableLiveData.postValue(it)
+                    mutableStateFlow.value = it
                 }
 
         }
